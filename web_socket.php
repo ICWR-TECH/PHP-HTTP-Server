@@ -26,6 +26,7 @@
 // PHP HTTP Socket
 // Coded By Afrizal F.A - ICWR-TECH
 error_reporting(0);
+$d=date("r");
 if($_POST['socket']) {
    $s=socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
    $server="ICWR-TECH Socket Server";
@@ -35,7 +36,7 @@ if($_POST['socket']) {
       echo "[+] Socket Running On PORT : $p";
    }
    socket_listen($s, true);
-   $resp="\rHTTP/1.1 200 OK\nServer: $server;\nContent-Type: text/html;\n
+   $resp="\rHTTP/1.1 200 OK\nDate: $d;\nServer: $server;\nContent-Type: text/html;\n
 $html
 ";
    while(true) {
