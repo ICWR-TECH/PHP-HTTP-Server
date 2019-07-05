@@ -36,7 +36,7 @@ if($_POST['socket']) {
       echo "[+] Socket Running On PORT : $p";
    }
    socket_listen($s, true);
-   $resp="\rHTTP/1.0 200 OK\nDate: $d;\nServer: $server;\nContent-Type: text/html;\n
+   $resp="\rHTTP/1.1 200 OK\nDate: $d;\nServer: $server;\nContent-Type: text/html;\n
 $html
 ";
    while(true) {
