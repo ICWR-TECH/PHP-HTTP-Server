@@ -1,51 +1,54 @@
+<?php
+
+error_reporting(0);
+set_time_limit(0);
+
+if(!empty($_POST['host']) && !empty($_POST['port']) && !empty($_POST['content'])) {
+
+    $s = socket_create(AF_INET, SOCK_STREAM, 0);
+    $headers = "HTTP/1.1 200 OK\r\n";
+    $headers .= "Date: " . date("r") . "\r\n";
+    $headers .= "Server: PHP HTTP Server ( R&D ICWR )\r\n";
+    $headers .= "Content-Type: text/html\r\n";
+    $headers .= "Content-Length: " . strlen($_POST['content']) . "\r\n";
+    $headers .= "Connection: keep-alive\r\n\r\n";
+    $headers .= $_POST['content'];
+
+    if(socket_bind($s, $_POST['host'], $_POST['port'])) {
+
+        while(true) {
+
+            socket_listen($s);
+            $accept = socket_accept($s);
+            socket_write($accept, $headers , strlen($headers));
+            socket_close($accept);
+
+
+        }
+
+    }
+
+}
+
+?>
+<!DOCTYPE html>
 <html>
 <head>
-<title>PHP Web Socket - Afrizal F.A</title>
-<meta name="description" content="PHP Web Socket - Afrizal F.A">
-<meta name="keywords" content="PHP Web Socket, ICWR-TECH, Web Socket, HTTP Socket">
-<style>
-    html {
-        background: white;
-        color: black;
-    }
-</style>
+    <title>PHP HTTP Server ( R&D ICWR )</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<center>
-   <h1>PHP Web Socket - Afrizal F.A</h1>
-   <form enctype="multipart/form-data" method="post">
-      PORT : <input type="number" name="port" min="1025" max="65535
-">
-      <br><br>
-      HTML :
-      <br><br>
-      <textarea cols="100" rows="20" name="html"></textarea>
-      <br><br>
-      <input type="submit" value="Socket!" name="socket">
-   </form>
-<?php
-// PHP HTTP Socket
-// Coded By Afrizal F.A - ICWR-TECH
-error_reporting(0);
-$d=date("r");
-if($_POST['socket']) {
-   $s=socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-   $server="ICWR-TECH Socket Server";
-   $html=$_POST['html'];
-   $p=$_POST['port'];
-   if(socket_bind($s, "0.0.0.0", $p)) {
-      echo "[+] Socket Running On PORT : $p";
-   }
-   socket_listen($s, true);
-   $resp="\rHTTP/1.1 200 OK\nDate: $d;\nServer: $server;\nContent-Type: text/html;\n
-$html
-";
-   while(true) {
-      $acc=socket_accept($s);
-      socket_write($acc, $resp, strlen($resp));
-      socket_close($acc);
-   }
-}
-?>
-    Copyright &copy;2019 - ICWR-TECH
-</center>
+<body style="text-align: center;">
+    <h1>PHP HTTP Server ( R&D ICWR )</h1>
+    Socket Function : <?php if(function_exists("socket_create") && function_exists("socket_bind")) { echo "ON"; } else { echo "OFF"; } ?>
+    <br><br>
+    <form enctype="multipart/form-data" method="post">
+        HOST : <input type="text" name="host">
+        <br><br>
+        PORT <input type="number" name="port">
+        <br><br>
+        <textarea style="width: 50%;" rows="15" name="content"></textarea>
+        <br><br>
+        <input type="submit" value="Run Server">
+    </form>
+</body>
 </html>
